@@ -3,22 +3,22 @@ name: Unity WebGL Build and Test
 on:
   push:
     branches:
-      - main  # Trigger the workflow on commits to the 'main' branch
+      - main
   pull_request:
     branches:
-      - main  # Trigger the workflow on pull requests to the 'main' branch
+      - main
 
 env:
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}  # Use GitHub Secrets for Unity License
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
 jobs:
   test_and_build:
     name: Test and Build Unity Project for WebGL
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2  # Checks out your repository code
+      uses: actions/checkout@v2
 
     - name: Cache Unity
       uses: actions/cache@v3
@@ -31,29 +31,30 @@ jobs:
     - name: Set up Unity Builder
       uses: game-ci/unity-builder@v2
       with:
-        unityVersion: 2022.3.40f1  # Your Unity version
-        targetPlatform: WebGL  # Build target platform WebGL
+        unityVersion: 2022.3.40f1
+        targetPlatform: WebGL
 
       env:
         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}  # Make sure this line is included
 
     - name: Run Play Mode Tests
       uses: game-ci/unity-test-runner@v2
       with:
         testMode: playmode
-        unityVersion: 2022.3.40f1  # Your Unity version
-        targetPlatform: WebGL  # Target platform for testing
+        unityVersion: 2022.3.40f1
+        targetPlatform: WebGL
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
       with:
         name: WebGLBuild
-        path: build/WebGL  # The folder containing the built game files
+        path: build/WebGL
 
     - name: Deploy to GitHub Pages
       if: success() && github.ref == 'refs/heads/main'
       uses: JamesIves/github-pages-deploy-action@4.1.4
       with:
-        branch: gh-pages  # Deploy to GitHub Pages on the 'gh-pages' branch
-        folder: build/WebGL  # Specify the build output folder for WebGL
+        branch: gh-pages
+        folder: build/WebGL
