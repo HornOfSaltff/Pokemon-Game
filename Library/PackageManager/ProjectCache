@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638644791847603758
-    m_Hash: 3086818659
+      ticks: 638644816200892751
+    m_Hash: 3635881867
   m_LockFileStatus:
     m_FilePath: C:/Users/User/Documents/GitHub/Pokemon-Game/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638644791847613862
-    m_Hash: 1576021127
+      ticks: 638644816200928633
+    m_Hash: 3988977718
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -22,6 +22,99 @@ m_LocalPackages:
 m_ProjectPath: C:/Users/User/Documents/GitHub/Pokemon-Game/Packages
 m_EditorVersion: 2022.3.0f1 (fb119bb0b476)
 m_ResolvedPackages:
+- packageId: com.unity.build-report-inspector@0.3.0-preview
+  testable: 0
+  isDirectDependency: 1
+  version: 0.3.0-preview
+  source: 1
+  resolvedPath: C:\Users\User\Documents\GitHub\Pokemon-Game\Library\PackageCache\com.unity.build-report-inspector@0.3.0-preview
+  assetPath: Packages/com.unity.build-report-inspector
+  name: com.unity.build-report-inspector
+  displayName: Build Report Inspector
+  author:
+    name: 
+    email: 
+    url: 
+  category: 
+  type: asset
+  description: 'Editor script which implements an inspector for the BuildReport class.
+
+
+    The
+    BuildReport class lets you access information about your last build, and helps
+    you profile the time spent building your project and the builds disk size footprint.
+    This information may help you improving your build times and build sizes. This
+    script allows you to inspect this information graphically in the Editor UI, making
+    it more easily accessible than the script APIs would.
+
+
+    You can obtain a
+    BuildReport object as the return value of the BuildPlayer API (https://docs.unity3d.com/ScriptReference/BuildPipeline.BuildPlayer.html)
+    when making a build, or by selecting a file containing BuildReport data.
+
+    Unity''s
+    default build setup will write such a file to Library/LastBuild.buildreport (this
+    may change in the future) when making a build. This script adds a convenient
+    menu shortcut (Window/Open Last Build Report), to copy that file to the Assets
+    folder and select it, so you can inspect it using the Build Report Inspector.
+
+    Once
+    open in the inspector, you can chose what data to view using the popup menu at
+    the top of the window.'
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 0.1.0-preview
+    - 0.1.1-preview
+    - 0.1.2-preview
+    - 0.2.2-preview
+    - 0.3.0-preview
+    compatible:
+    - 0.1.0-preview
+    - 0.1.1-preview
+    - 0.1.2-preview
+    - 0.2.2-preview
+    - 0.3.0-preview
+    recommended: 
+    deprecated: []
+  dependencies: []
+  resolvedDependencies: []
+  keywords:
+  - build
+  - report
+  - inspector
+  - profile
+  - time
+  - size
+  - optimize
+  - mobile
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+  hideInEditor: 0
+  isAssetStorePackage: 0
+  datePublishedTicks: 637985780900000000
+  documentationUrl: 
+  hasRepository: 1
+  repository:
+    type: git
+    url: https://github.com/Unity-Technologies/BuildReportInspector.git
+    revision: 1fb22db75f9f85978b137da44df4e6df27eea6ac
+    path: 
+  unityLifecycle:
+    version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
 - packageId: com.unity.collab-proxy@2.4.3
   testable: 0
   isDirectDependency: 1
