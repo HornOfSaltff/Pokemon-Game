@@ -12,49 +12,81 @@ env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
 jobs:
+  free-disk-space:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false 
+          android: true 
+          dotnet: true 
+          haskell: true 
+          large-packages: true 
+          docker-images: true 
+          swap-storage: true 
+
   test_and_build:
     name: Test and Build Unity Project for WebGL
     runs-on: ubuntu-latest
+    needs: free-disk-space
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
-    - name: Cache Unity
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/unity
-        key: ${{ runner.os }}-unity-${{ hashFiles('**/Packages/manifest.json') }}
-        restore-keys: |
-          ${{ runner.os }}-unity-
+      # Set up Git user identity
+      - name: Set up Git identity
+        run: |
+          git config --global user.email "ecy14@scarletmail.rutgers.edu"
+          git config --global user.name "ecy14"
 
-    - name: Set up Unity Builder
-      uses: game-ci/unity-builder@v2
-      with:
-        unityVersion: 2022.3.40f1
-        targetPlatform: WebGL
+      # Create Git LFS file list
+      - name: Create LFS file list        
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id      
 
-      env:
-        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}  # Make sure this line is included
+      # Restore Git LFS cache
+      - name: Restore LFS cache        
+        uses: actions/cache@v3        
+        id: lfs-cache        
+        with:          
+          path: .git/lfs          
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}   
 
-    - name: Run Play Mode Tests
-      uses: game-ci/unity-test-runner@v2
-      with:
-        testMode: playmode
-        unityVersion: 2022.3.40f1
-        targetPlatform: WebGL
+      # Git LFS Pull
+      - name: Git LFS Pull        
+        run: |          
+          git lfs pull          
+          git add .          
+          git reset --hard      
 
-    - name: Upload Build Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: WebGLBuild
-        path: build/WebGL
+      # Cache Unity Library
+      - uses: actions/cache@v3        
+        with:          
+          path: Library          
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}          
+          restore-keys: |            
+            Library-      
 
-    - name: Deploy to GitHub Pages
-      if: success() && github.ref == 'refs/heads/main'
-      uses: JamesIves/github-pages-deploy-action@4.1.4
-      with:
-        branch: gh-pages
-        folder: build/WebGL
+      # Clean Docker environment      
+      - name: Clean Docker environment        
+        run: |          
+          docker system prune -f --all          
+          docker volume prune -f 
+
+      - name: Build WebGL
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          BRANCH: gh-pages
+          FOLDER: build/WebGL
