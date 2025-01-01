@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
 /// This is needed because Update() is Frame rate dependent and FixedUpdate() is Frame rate independent
     private void FixedUpdate()
     {
-        rb.velocity = input * moveSpeed;
+        rb.linearVelocity = input * moveSpeed;
     }
     void ProcessInputs()
     {
